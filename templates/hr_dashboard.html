@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h2>HR Dashboard</h2>
+    <form method="post" class="mb-4">
+        <div class="mb-3">
+            <label>Candidate Name</label>
+            <input type="text" name="name" class="form-control" value="{{ name or '' }}" required>
+        </div>
+        <div class="mb-3">
+            <label>Candidate Email</label>
+            <input type="email" name="email" class="form-control" value="{{ email or '' }}" required>
+        </div>
+        <div class="mb-3">
+            <label>Domain</label>
+            <select name="domain" class="form-select" required>
+                <option value="Python" {% if domain == 'Python' %}selected{% endif %}>Python</option>
+                <option value="Java" {% if domain == 'Java' %}selected{% endif %}>Java</option>
+                <option value="SQL" {% if domain == 'SQL' %}selected{% endif %}>SQL</option>
+                <option value="Networking" {% if domain == 'Networking' %}selected{% endif %}>Networking</option>
+                <option value="Finance" {% if domain == 'Finance' %}selected{% endif %}>Finance</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Generate & Send Link</button>
+    </form>
+
+    {% if link %}
+        <div class="alert alert-info">
+            🔗 Quiz link for <b>{{ name }}</b>: 
+            <a href="{{ link }}" target="_blank">{{ link }}</a>
+        </div>
+    {% endif %}
+
+    <h3>Results</h3>
+    <table class="table table-bordered" id="results-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Domain</th>
+                <th>Score</th>
+                <th>Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in results %}
+            <tr>
+                <td>{{ r[1] }}</td>
+                <td>{{ r[2] }}</td>
+                <td>{{ r[3] }}</td>
+                <td>{{ r[4] }}</td>
+                <td>{{ r[5] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    var socket = io();
+    socket.on("new_result", function(data) {
+        let table = document.getElementById("results-table").getElementsByTagName('tbody')[0];
+        let row = table.insertRow(0);
+        row.insertCell(0).innerHTML = data.name;
+        row.insertCell(1).innerHTML = data.email;
+        row.insertCell(2).innerHTML = data.domain;
+        row.insertCell(3).innerHTML = data.score;
+        row.insertCell(4).innerHTML = data.time;
+    });
+</script>
+{% endblock %}

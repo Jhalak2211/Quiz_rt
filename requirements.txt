@@ -1,0 +1,15 @@
+Flask==3.0.3
+Flask-SocketIO==5.3.6
+python-socketio==5.11.2
+eventlet==0.36.1
+google-generativeai==0.7.2
+python-dotenv==1.0.1
+email-validator==2.2.0
+Jinja2==3.1.4
+itsdangerous==2.2.0
+Werkzeug==3.0.3
+gunicorn
+
+
+ # To see o/p
+# http://localhost:5000/hr
